@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:superhero_app/models/super_hero.dart';
@@ -12,16 +13,12 @@ class HttpHelper {
 
     http.Response response = await http.get(url);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == HttpStatus.ok) {
       final jsonResponse = json.decode(response.body);
       final maps = jsonResponse['results'];
 
       List superHeros = maps
-          .map((map) => SuperHero(
-                name: map['name'],
-                realName: map['biography']['full-name'],
-                poster: map['image']['url'],
-              ))
+          .map((map) => SuperHero.fromJson(map))
           .toList();
       return superHeros;
     }

@@ -49,7 +49,9 @@ class SuperHeroItem extends StatelessWidget {
       child: ListTile(
         title: Text(superHero.name),
         subtitle: Text(superHero.realName),
-        leading: Image.network(superHero.poster),
+        leading: Image.network(
+          superHero.poster,
+        ),
       ),
     );
   }
