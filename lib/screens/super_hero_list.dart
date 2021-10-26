@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:superhero_app/models/super_hero.dart';
+import 'package:superhero_app/screens/super_hero_detail.dart';
 import 'package:superhero_app/utils/http_helper.dart';
 
 class SuperHeroList extends StatefulWidget {
@@ -45,12 +46,23 @@ class SuperHeroItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(superHero.name),
-        subtitle: Text(superHero.realName),
-        leading: Image.network(
-          superHero.poster,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SuperHeroDetail(superHero: superHero)));
+      },
+      child: Card(
+        child: ListTile(
+          title: Text(superHero.name),
+          subtitle: Text(superHero.realName),
+          leading: Hero(
+            tag: superHero.id,
+            child: Image.network(
+              superHero.poster,
+            ),
+          ),
         ),
       ),
     );
