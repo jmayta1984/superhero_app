@@ -47,4 +47,10 @@ class DbHelper {
     List superHeros = maps.map((map) => SuperHero.fromMap(map)).toList();
     return superHeros;
   }
+
+  Future<bool> isFavorite(SuperHero superHero) async {
+    final maps =
+        await db!.query(tableName, where: 'id=?', whereArgs: [superHero.id]);
+    return maps.isNotEmpty;
+  }
 }
