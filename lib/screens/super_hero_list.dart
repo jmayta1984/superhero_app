@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:superhero_app/models/super_hero.dart';
 import 'package:superhero_app/screens/super_hero_detail.dart';
+import 'package:superhero_app/utils/db_helper.dart';
 import 'package:superhero_app/utils/http_helper.dart';
 
 class SuperHeroList extends StatefulWidget {
@@ -49,15 +50,25 @@ class SuperHeroItem extends StatefulWidget {
 }
 
 class _SuperHeroItemState extends State<SuperHeroItem> {
-  bool favorite = false;
+  late bool favorite;
+  late DbHelper dbHelper;
+
+  @override
+  void initState() {
+    favorite = false;
+    dbHelper = DbHelper();
+    ifFavorite();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        /*  Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => SuperHeroDetail(superHero: widget.superHero)));
+                builder: (_) => SuperHeroDetail(superHero: widget.superHero)));*/
       },
       child: Card(
         child: ListTile(
@@ -71,6 +82,9 @@ class _SuperHeroItemState extends State<SuperHeroItem> {
             ),
             trailing: IconButton(
               onPressed: () {
+                favorite
+                    ? dbHelper.deleteSuperHero(widget.superHero)
+                    : dbHelper.inserSuperHero(widget.superHero);
                 setState(() {
                   favorite = !favorite;
                 });
@@ -82,5 +96,13 @@ class _SuperHeroItemState extends State<SuperHeroItem> {
             )),
       ),
     );
+  }
+
+  Future ifFavorite() async {
+    await dbHelper.openDb();
+    final result = await dbHelper.isFavorite(widget.superHero);
+    setState(() {
+      favorite = result;
+    });
   }
 }
