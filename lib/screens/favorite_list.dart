@@ -15,6 +15,7 @@ class _FavoriteListState extends State<FavoriteList> {
   @override
   void initState() {
     super.initState();
+    superHeros = [];
     dbHelper = DbHelper();
     fetchFavorites();
   }
@@ -25,12 +26,12 @@ class _FavoriteListState extends State<FavoriteList> {
         itemCount: superHeros.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: superHeros[index].name,
+            title: Text(superHeros[index].name),
             trailing: IconButton(
               onPressed: () {
                 dbHelper.deleteSuperHero(superHeros[index]);
               },
-              icon: const Icon(Icons.remove),
+              icon: const Icon(Icons.delete),
             ),
           );
         });
