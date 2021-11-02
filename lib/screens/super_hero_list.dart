@@ -17,10 +17,10 @@ class _SuperHeroListState extends State<SuperHeroList> {
 
   @override
   void initState() {
+    super.initState();
     superHeros = [];
     httpHelper = HttpHelper();
     fetchSuperHeros();
-    super.initState();
   }
 
   void fetchSuperHeros() {
