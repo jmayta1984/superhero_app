@@ -19,6 +19,7 @@ class SuperHero {
     required this.power,
   });
 
+  // Parsing data from json for networking
   factory SuperHero.fromJson(Map<String, dynamic> json) {
     return SuperHero(
       id: json['id'],
@@ -29,6 +30,28 @@ class SuperHero {
       poster: json['image']['url'],
       speed: json['powerstats']['speed'],
       power: json['powerstats']['power'],
+    );
+  }
+
+  // Serializing to map for local persistence
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+
+  // Parsing data from map for local persistence
+  factory SuperHero.fromMap(Map<String, dynamic> map) {
+    return SuperHero(
+      id: map['id'],
+      name: map['name'],
+      realName: '',
+      placeOfBirth: '',
+      publisher: '',
+      poster: '',
+      speed: '',
+      power: '',
     );
   }
 }

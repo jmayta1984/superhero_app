@@ -1,9 +1,11 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:superhero_app/models/super_hero.dart';
 
 class DbHelper {
   final int version = 1;
   final String name = 'superhero.db';
+  final String tableName = 'superheros';
   Database? db;
 
   static final DbHelper _dbHelper = DbHelper._interal();
@@ -19,11 +21,30 @@ class DbHelper {
       join(await getDatabasesPath(), name),
       onCreate: (database, version) {
         database.execute(
-          'CREATE TABLE superheros(id TEXT PRIMARY KEY, name TEXT)',
+          'CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT)',
         );
       },
       version: version,
     );
     return db;
+  }
+
+  Future inserSuperHero(SuperHero superHero) async {
+    await db!.insert(tableName, superHero.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future deleteSuperHero(SuperHero superHero) async {
+    await db!.delete(
+      tableName,
+      where: 'id=?',
+      whereArgs: [superHero.id],
+    );
+  }
+
+  Future<List> fetchSuperHeros() async {
+    final maps = await db!.query(tableName);
+    List superHeros = maps.map((map) => SuperHero.fromMap(map)).toList();
+    return superHeros;
   }
 }
