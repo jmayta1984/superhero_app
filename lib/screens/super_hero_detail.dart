@@ -21,27 +21,12 @@ class SuperHeroDetail extends StatelessWidget {
               background: Hero(
                 tag: superHero.id,
                 child: Image.network(superHero.poster),
-                
               ),
             ),
           ),
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Column(
-                  children: [
-                    Text(superHero.name),
-                    SuperHeroBiography(superHero: superHero),
-                    SuperHeroStats(superHero: superHero),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text(superHero.name),
-                    SuperHeroBiography(superHero: superHero),
-                    SuperHeroStats(superHero: superHero),
-                  ],
-                ),
                 Column(
                   children: [
                     Text(superHero.name),

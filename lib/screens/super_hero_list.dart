@@ -62,13 +62,20 @@ class _SuperHeroItemState extends State<SuperHeroItem> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        /*  Navigator.push(
+        Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => SuperHeroDetail(superHero: widget.superHero)));*/
+                builder: (_) => SuperHeroDetail(superHero: widget.superHero)));
       },
       child: Card(
         child: ListTile(
