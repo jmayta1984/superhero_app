@@ -9,39 +9,50 @@ class FavoriteList extends StatefulWidget {
 }
 
 class _FavoriteListState extends State<FavoriteList> {
-  late List superHeros;
+  late Future<List> superHeros;
   late DbHelper dbHelper;
 
   @override
   void initState() {
     super.initState();
-    superHeros = [];
     dbHelper = DbHelper();
-    fetchFavorites();
+    superHeros = fetchFavorites();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: superHeros.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(superHeros[index].name),
-            trailing: IconButton(
-              onPressed: () {
-                dbHelper.deleteSuperHero(superHeros[index]);
-              },
-              icon: const Icon(Icons.delete),
-            ),
+    return FutureBuilder<List>(
+        future: superHeros,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+                itemCount: snapshot.data?.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(snapshot.data?[index].name),
+                    trailing: IconButton(
+                      onPressed: () {
+                        dbHelper.deleteSuperHero(snapshot.data?[index]);
+                        setState(() {
+                          snapshot.data?.removeAt(index);
+                        });
+                      },
+                      icon: const Icon(Icons.delete),
+                    ),
+                  );
+                });
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         });
   }
 
-  Future fetchFavorites() async {
+  Future<List> fetchFavorites() async {
     await dbHelper.openDb();
-    final result = await dbHelper.fetchSuperHeros();
-    setState(() {
-      superHeros = result;
-    });
+    return dbHelper.fetchSuperHeros();
   }
 }
